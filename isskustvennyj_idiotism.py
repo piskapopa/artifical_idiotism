@@ -1,6 +1,5 @@
 import random as r
-
-VVERX = 0
+VVERX=0
 VLEVO = 1
 VNIZ = 2
 VPRAVO = 3
@@ -34,6 +33,7 @@ def main():
             print("Nagrada tip:", ochki)
             print(risovniye(ppp))
             uuu = otdelnaya_funktsiya(sostoyanie["path"])
+            vvv = uuu
             step = 0
             sostoyanie = {"koordinaty": list(y), "path": []}
             ochki = 0
@@ -51,6 +51,7 @@ def main():
                     print("Shagov:", step)
                     print("Nagrada tip:", ochki)
                     print(risovniye(ppp))
+                    print(gaholahola(vvv, risovniye(ppp)))
                     break
             break
         
@@ -125,11 +126,11 @@ def risovniye(ppp):
             if ppp[j][l] == "0":
                 risovalka+=" "
             elif ppp[j][l] == "1":
-                risovalka+="▯"
+                risovalka+="#"
             elif ppp[j][l] == "2":
                 risovalka+="@"
             elif ppp[j][l] == "3":
-                risovalka+="#"
+                risovalka+="X"
         risovalka+="\n"
 
     return risovalka
@@ -153,6 +154,15 @@ def aaaaaaaaaaaaaaaaaaaa(spisok):
             k.append({(-1,0):VVERX,(1,0):VNIZ,(0,-1):VLEVO,(0,1):VPRAVO}[(i[0]-spisok[j-1][0],i[1]-spisok[j-1][1])])
 
     return k
-             
 
+def gaholahola(vvv, izobrazhenie):
+    izobrazhenie = izobrazhenie.split("\n")
+    izobrazhenie = [list(j) for j in izobrazhenie]
+    for i in vvv:
+        izobrazhenie[i[0]][i[1]] = "1"
+
+    izobrazhenie = ["".join(y) for y in izobrazhenie]
+    izobrazhenie = "\n".join(izobrazhenie)
+
+    return izobrazhenie
 main()
