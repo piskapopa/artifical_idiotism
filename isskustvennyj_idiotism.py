@@ -1,3 +1,4 @@
+# q-learning
 import random as r
 VVERX=0
 VLEVO = 1
@@ -10,6 +11,23 @@ SLOVAR = {
     VNIZ: "VNIZ",
     VPRAVO: "VPRAVO"
 }
+PRIGODITSA = {
+    VVERX: [-1,0],
+    VLEVO: [0,-1],
+    VNIZ: [1,0],
+    VPRAVO: [0,1]
+}
+
+q_table = {}
+
+for i in range(-1, 9):
+    for j in range(-1, 21):
+        q_table[(i,j)] = [0,0,0,0,]
+
+# q_table[(0,0)][0] = -1000000000000000000000000000000000000000000
+# q_table[(0,0)][3] = 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
+ALPHA = 0.9
+GAMMA = 0.1
 
 def main():
     step = 0
@@ -20,13 +38,15 @@ def main():
     print(y, yy)
     sostoyanie = {"koordinaty": list(y), "path": []}
     while True:
-        onstanty = konstanty(idiot(ppp, sostoyanie["koordinaty"], sostoyanie, ppp_shirina, ppp_vysota), sostoyanie, ppp_shirina, ppp_vysota, ppp)
+        onstanty = konstanty(idiot_two(tuple(sostoyanie["koordinaty"]), ppp_shirina, ppp_vysota, ppp), sostoyanie, ppp_shirina, ppp_vysota, ppp)
         sostoyanie["path"].append(list(sostoyanie["koordinaty"]))
+        # print(sostoyanie["koordinaty"])
         step+=1
         sostoyanie = onstanty[0]
-        print(sostoyanie["koordinaty"])
-        print(onstanty[2])
+        # print(sostoyanie["koordinaty"])
+        # print(onstanty[2])
         ochki+=onstanty[2]
+        # breakpoint()
         if onstanty[1]:
             print("Yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
             print("Shagov:", step)
@@ -39,20 +59,22 @@ def main():
             ochki = 0
             uuu = aaaaaaaaaaaaaaaaaaaa(uuu)
             print(uuu)
-            while True:
-                onstanty = konstanty(uuu[step], sostoyanie, ppp_shirina, ppp_vysota, ppp)
-                step+=1
-                sostoyanie = onstanty[0]
-                print(sostoyanie["koordinaty"])
-                print(onstanty[2])
-                ochki+=onstanty[2]
-                if onstanty[1]:
-                    print("Yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
-                    print("Shagov:", step)
-                    print("Nagrada tip:", ochki)
-                    print(risovniye(ppp))
-                    print(gaholahola(vvv, risovniye(ppp)))
-                    break
+            # while True:
+            #     onstanty = konstanty(uuu[step], sostoyanie, ppp_shirina, ppp_vysota, ppp)
+            #     step+=1
+            #     sostoyanie = onstanty[0]
+            #     print(sostoyanie["koordinaty"])
+            #     print(onstanty[2])
+            #     ochki+=onstanty[2]
+            #     if onstanty[1]:
+            #         print("Yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+            #         print("Shagov:", step)
+            #         print("Nagrada tip:", ochki)
+            #         print(risovniye(ppp))
+            #         print(gaholahola(vvv, risovniye(ppp)))
+            #         break
+            print(gaholahola(vvv, risovniye(ppp)))
+            # print(q_table)
             break
         
 
@@ -113,12 +135,6 @@ def figna(koordinaty, ppp_shirina, ppp_vysota, ppp):
             return True
     return False
 
-def idiot(ppp, koordinaty, sostoyanie,  ppp_shirina, ppp_vysota):
-    rr = r.choice(SPISOK)
-
-
-    return rr
-
 def risovniye(ppp):
     risovalka = ""
     for j, i in enumerate(ppp):
@@ -165,4 +181,42 @@ def gaholahola(vvv, izobrazhenie):
     izobrazhenie = "\n".join(izobrazhenie)
 
     return izobrazhenie
-main()
+
+def idiot_two(state, ppp_shirina, ppp_vysota, ppp):
+    shag = maxiumim(q_table[state])
+    izmenit(state, shag, ppp_shirina, ppp_vysota, ppp)
+    return shag
+
+def maxiumim(spisok):
+    maximiumim = max(spisok)
+
+    indexes = []
+    for j, i in enumerate(spisok):
+        if i == maximiumim:
+            indexes.append(j)
+
+
+    return r.choice(indexes)
+
+def izmenit(state, action, ppp_shirina, ppp_vysota, ppp):
+    global q_table
+
+    old_state = state
+
+    new_state = (old_state[0]+PRIGODITSA[action][0], old_state[1]+PRIGODITSA[action][1])
+
+    old_q = q_table[old_state][action]
+
+    reward = konstanty(action, {"koordinaty": list(state), "path": [], "tvoyuzhdiviziyu": ""}, ppp_shirina, ppp_vysota, ppp)[2]
+
+    best_future_q = max(q_table[new_state])
+
+    new_q = old_q + ALPHA * (
+    reward
+    + GAMMA * best_future_q
+    - old_q
+)
+    q_table[state][action] = new_q
+
+for i in range(10):
+    main()
