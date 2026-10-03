@@ -1,4 +1,5 @@
 # q-learning
+# q-learning
 import random as r
 VVERX=0
 VLEVO = 1
