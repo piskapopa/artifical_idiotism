@@ -27,10 +27,11 @@ for i in range(-1, 9):
 
 # q_table[(0,0)][0] = -1000000000000000000000000000000000000000000
 # q_table[(0,0)][3] = 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
-ALPHA = 0.9
-GAMMA = 0.1
+ALPHA = 0.1
+GAMMA = 0.9
 
 def main():
+    global sostoyanie
     step = 0
     ochki = 0
     ppp, ppp_shirina, ppp_vysota = funktsiya("file")
@@ -219,5 +220,6 @@ def izmenit(state, action, ppp_shirina, ppp_vysota, ppp):
 )
     q_table[state][action] = new_q
 
-for i in range(10):
-    main()
+if __name__ == "__main__":
+    for i in range(10):
+        main()
